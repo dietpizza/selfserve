@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../const";
 import type { FileMetadata } from "../types";
 
 export function useDirectoryListing(path: string) {
@@ -11,7 +10,7 @@ export function useDirectoryListing(path: string) {
   async function getFiles() {
     setIsLoading(true);
     try {
-      const data = await axios.get(`${API_URL}/api/list/${encodeURIComponent(path)}`);
+      const data = await axios.get(`/api/list/${encodeURIComponent(path)}`);
       setFiles(data.data);
       console.info("API-Response", data.data);
     } catch (e) {

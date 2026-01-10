@@ -1,13 +1,15 @@
-// A simple zoomable image wrapper that supports pinch/scroll zoom and panning.
 import React from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import type { FileMetadata } from "../types";
 
 type Props = {
   onClose: () => void;
+  index: number;
+  playlist: FileMetadata[];
   children?: React.ReactNode;
 };
 
-export const ZoomableOverlay: React.FC<Props> = ({ onClose, children }) => {
+export const ZoomableOverlay: React.FC<Props> = ({ index, playlist, onClose, children }) => {
   const handleClose = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     onClose();
@@ -29,7 +31,7 @@ export const ZoomableOverlay: React.FC<Props> = ({ onClose, children }) => {
 
       <TransformWrapper
         initialScale={1}
-        minScale={0.5}
+        minScale={1}
         maxScale={5}
         doubleClick={{ mode: "reset" }}
         wheel={{ step: 0.2 }}
@@ -37,7 +39,9 @@ export const ZoomableOverlay: React.FC<Props> = ({ onClose, children }) => {
         limitToBounds={true}
         disablePadding={true}
       >
-        <TransformComponent wrapperClass="full-height">{children}</TransformComponent>
+        <TransformComponent wrapperClass="full-height">
+          <img src={`/files/${encodeURIComponent(playlist[index].filename)}`} alt={playlist[index].filename} />
+        </TransformComponent>
       </TransformWrapper>
     </div>
   );

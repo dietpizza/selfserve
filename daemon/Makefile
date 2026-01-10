@@ -12,7 +12,14 @@ help:
 
 dev:
 	@echo "Starting development server..."
+	$(MAKE) prepare-web
 	go run .
+
+
+prepare-web:
+	@echo "Copying frontend build into web/"
+	@rm -rf web/*
+	@cp -r ../frontend/dist/. web/
 
 release: clean | $(DISTDIR)
 	@echo "Building release binary into $(DISTDIR)/$(BINARY)"

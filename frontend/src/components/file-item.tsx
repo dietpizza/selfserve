@@ -1,21 +1,25 @@
 import type { FileMetadata } from "../types";
-import ic_document from "../assets/id_document.svg";
+import ic_photo from "../assets/ic_photo.svg";
+import ic_video from "../assets/ic_video.svg";
+import ic_document from "../assets/ic_document.svg";
 import ic_folder from "../assets/ic_folder.svg";
-import { API_URL } from "../const";
+import ic_unknown from "../assets/ic_unknown.svg";
+import type React from "react";
 
 function getIconForMimetype(mimetype: string): string {
   if (mimetype.startsWith("image/")) {
-    return "../assets/id_photo.svg";
+    return ic_photo;
   } else if (mimetype.startsWith("video/")) {
-    return "../assets/id_video.svg";
+    return ic_video;
   } else if (mimetype.startsWith("text/")) {
-    return "../assets/id_document.svg";
-  } else if (mimetype === "directory") {
-    return "../assets/id_folder.svg";
-  } else {
     return ic_document;
+  } else if (mimetype === "directory") {
+    return ic_folder;
+  } else {
+    return ic_unknown;
   }
 }
+
 type FileItemProps = { meta: FileMetadata; highlight: boolean; onPress: (meta: FileMetadata) => void };
 
 export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) => {
@@ -29,7 +33,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
       }`}
       onClick={() => onPress(meta)}
     >
-      <img src={ic_document} className="w-8 h-8 inline-block mr-2" />
+      <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-2" />
       <div className="flex flex-col flex-1 ">
         <span className="text-md truncate font-medium text-white font-mono">{filename}</span>
         <span className="text-xs text-gray-300">{infoString}</span>
