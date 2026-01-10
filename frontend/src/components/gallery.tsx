@@ -1,37 +1,66 @@
-import LightGallery from "lightgallery/react";
-
-// import styles
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
-import "lightgallery/css/lg-thumbnail.css";
-
-// import plugins if you need
-import _zoom from "lightgallery/plugins/zoom";
-import _autoplay from "lightgallery/plugins/autoplay";
-import _pager from "lightgallery/plugins/pager";
-
 import type { FileMetadata } from "../types";
+
+import { getSpotlightSource } from "../utils";
 import { FileItem } from "./file-item";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type GalleryProps = {
   images: FileMetadata[];
+  onDeleteImage: (image: FileMetadata) => void;
 };
 
-export function Gallery({ images }: GalleryProps) {
-  const onInit = () => {
-    console.log("lightGallery has been initialized");
-  };
+export function Gallery({ images, onDeleteImage }: GalleryProps) {
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
+  const isInit = useRef(false);
+
+  function onImageChange(index: number) {
+    setCurrentIndex(index);
+  }
+
+  const spotlightSources = useMemo(() => images.map(getSpotlightSource), [images]);
+
+  useEffect(() => {
+    if (isInit.current) return;
+
+    // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
+    Spotlight.init();
+    // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
+    Spotlight.addControl("delete", function (event) {
+      const isDeleteConfirmed = confirm("Delete this image?");
+      if (isDeleteConfirmed) {
+        // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
+        onDeleteImage(images[Spotlight.currentIndex()]);
+      }
+    });
+
+    isInit.current = true;
+  }, []);
+
+  function openSpotlight(index: number) {
+    // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
+    Spotlight.show(spotlightSources, {
+      preload: true,
+      index,
+      onchange: onImageChange,
+      "zoom-in": false,
+      "zoom-out": false,
+      autohide: false,
+      autofit: false,
+    });
+  }
 
   return (
     <div className="App">
-      <LightGallery onInit={onInit} speed={500} plugins={[_zoom]}>
-        {images.map((image, index) => (
-          <a key={image.filename} href={`/files/${encodeURIComponent(image.filename)}`}>
-            <FileItem meta={image} highlight={false} />
-          </a>
-        ))}
-      </LightGallery>
+      {images.map((image, index) => (
+        <a
+          key={image.filename}
+          onClick={() => openSpotlight(index)}
+          href={`/files/${encodeURIComponent(image.filename)}`}
+          onClickCapture={() => setCurrentIndex(index)}
+        >
+          <FileItem meta={image} highlight={index == currentIndex} />
+        </a>
+      ))}
     </div>
   );
 }

@@ -13,12 +13,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
-    "embla-carousel": "^8.6.0",
-    "embla-carousel-react": "^8.6.0",
-    "lightgallery": "^2.9.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-zoom-pan-pinch": "^3.7.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {

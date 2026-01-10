@@ -12,7 +12,6 @@ export function useDirectoryListing(path: string) {
     try {
       const data = await axios.get(`/api/list/${encodeURIComponent(path)}`);
       setFiles(data.data);
-      console.info("API-Response", data.data);
     } catch (e) {
       setError("Failed to fetch directory listing");
     }

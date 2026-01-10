@@ -107,6 +107,7 @@ pre {
   display: none;
 }
 
-.full-height {
-  height: 100% !important;
+.spl-delete {
+  @apply bg-red-500;
+  background-image: url(assets/ic_delete.svg);
 }

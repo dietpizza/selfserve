@@ -2,6 +2,7 @@ import type React from "react";
 import { useDirectoryListing } from "./utils";
 import { Gallery } from "./components";
 import { useState, useMemo } from "react";
+import type { FileMetadata } from "./types";
 
 export const ListingPage: React.FC = () => {
   const { files, loading, error } = useDirectoryListing("/");
@@ -17,10 +18,14 @@ export const ListingPage: React.FC = () => {
     return files.filter((f) => f.mimetype.startsWith("image/"));
   }, [files, selectedFileIndex]);
 
+  function onDeleteImage(image: FileMetadata) {
+    // TODO: Implement delete functionality
+  }
+
   return (
     <div className="bg-slate-800 py-2 h-screen w-screen max-h-screen md:max-w-prose no-scrollbar flex flex-col overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <Gallery images={images || []} />
+        <Gallery images={images || []} onDeleteImage={onDeleteImage} />
       </div>
     </div>
   );
