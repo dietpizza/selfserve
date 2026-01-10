@@ -18,11 +18,12 @@ dev:
 
 prepare-web:
 	@echo "Copying frontend build into web/"
-	@rm -rf web/*
-	@cp -r ../frontend/dist/. web/
+	@rm -rf dist/web/*
+	@cp -r ../frontend/dist/. dist/web/
 
 release: clean | $(DISTDIR)
 	@echo "Building release binary into $(DISTDIR)/$(BINARY)"
+	$(MAKE) prepare-web
 	CGO_ENABLED=0 GOOS=$(shell go env GOOS) GOARCH=$(shell go env GOARCH) \
 		go build -ldflags "-s -w" -o $(DISTDIR)/$(BINARY) ./...
 		upx $(DISTDIR)/$(BINARY)

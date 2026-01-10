@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-//go:embed web/*
+//go:embed dist/web/*
 var embeddedFiles embed.FS
 
 // ReactBuildFS returns an http.FileSystem for the embedded React build directory.
 func ReactBuildFS() http.FileSystem {
-	sub, err := fs.Sub(embeddedFiles, "web")
+	sub, err := fs.Sub(embeddedFiles, "dist/web")
 	if err != nil {
 		panic(err)
 	}
