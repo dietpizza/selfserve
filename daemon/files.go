@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"syscall"
 )
@@ -67,6 +68,11 @@ func listFilesMetadata(path string) ([]FileMeta, error) {
 			Size:     fi.Size(),
 		})
 	}
+
+	// Sort by Mtime descending (newest first)
+	sort.Slice(out, func(i, j int) bool {
+		return out[i].Mtime > out[j].Mtime
+	})
 
 	return out, nil
 }
