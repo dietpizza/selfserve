@@ -2,7 +2,7 @@ import type React from "react";
 import { useDirectoryListing } from "./utils";
 import { FileItem } from "./components";
 import type { FileMetadata } from "./types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "./const";
 
 export const ListingPage: React.FC = () => {
@@ -35,10 +35,50 @@ export const ListingPage: React.FC = () => {
 };
 
 const Overlay: React.FC<{ onClose: () => void; children?: React.ReactNode }> = ({ onClose, children }) => {
+  const [mounted, setMounted] = useState(true);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    // trigger fade-in on mount
+    const t = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  const handleClose = () => {
+    // start fade-out then unmount after duration
+    setVisible(false);
+    // match transition duration in Tailwind classes (300ms)
+    setTimeout(() => setMounted(false), 300);
+    // call parent's onClose after animation ends to clear selected file
+    setTimeout(onClose, 300);
+  };
+
+  if (!mounted) return null;
+
   return (
     <>
-      <div className="absolute inset-0 flex bg-black opacity-50 items-center justify-center" />
-      <div className="absolute inset-0 flex items-center justify-center" onClick={onClose}>
+      <div
+        className={`absolute inset-0 flex bg-black items-center justify-center transition-opacity duration-300 ${
+          visible ? "opacity-50" : "opacity-0"
+        }`}
+      />
+      <div
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="absolute top-4 right-4 z-50">
+          <button
+            aria-label="Close"
+            className="bg-white/10 hover:bg-white/20 text-white rounded-full w-8 h-8 flex items-center justify-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClose();
+            }}
+          >
+            ✕
+          </button>
+        </div>
         {children}
       </div>
     </>
