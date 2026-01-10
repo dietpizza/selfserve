@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"mime"
 	"os"
 	"path/filepath"
 	"sort"
@@ -34,6 +35,7 @@ type FileMeta struct {
 	Filename string `json:"filename"`
 	Mtime    int64  `json:"mtime"`
 	Ctime    int64  `json:"ctime"`
+	MimeType string `json:"mimetype"`
 	Size     int64  `json:"size"`
 }
 
@@ -51,21 +53,36 @@ func listFilesMetadata(path string) ([]FileMeta, error) {
 
 	var out []FileMeta
 	for _, fi := range infos {
-		if fi.IsDir() {
-			continue
-		}
 		var ctime int64
 		if statT, ok := fi.Sys().(*syscall.Stat_t); ok {
 			ctime = statT.Ctim.Sec
 		} else {
+			// fallback to modtime if ctime unavailable
 			ctime = fi.ModTime().Unix()
+		}
+
+		mimeType := ""
+		size := fi.Size()
+		if fi.IsDir() {
+			// represent directories specially
+			mimeType = "directory"
+			// directories have size 0 for our purposes
+			size = 0
+		} else {
+			// detect mime type by extension as cheap heuristic
+			mimeType = mime.TypeByExtension(strings.ToLower(filepath.Ext(fi.Name())))
+			if mimeType == "" {
+				// default to octet-stream when unknown
+				mimeType = "application/octet-stream"
+			}
 		}
 
 		out = append(out, FileMeta{
 			Filename: fi.Name(),
 			Mtime:    fi.ModTime().Unix(),
 			Ctime:    ctime,
-			Size:     fi.Size(),
+			MimeType: mimeType,
+			Size:     size,
 		})
 	}
 

@@ -1,5 +1,4 @@
-BINARY := daemon
-DEVBINARY := daemon-dev
+BINARY := selfserve
 DISTDIR := dist
 
 .PHONY: help dev release clean
@@ -15,15 +14,11 @@ dev:
 	@echo "Starting development server..."
 	go run .
 
-dev-watch:
-	@echo "Starting development server with watch (CompileDaemon required)"
-	@echo "Install with: go install github.com/githubnemo/CompileDaemon@latest"
-	CompileDaemon -directory=. -command="go run ." -exclude-dir=$(DISTDIR)
-
 release: clean | $(DISTDIR)
 	@echo "Building release binary into $(DISTDIR)/$(BINARY)"
 	CGO_ENABLED=0 GOOS=$(shell go env GOOS) GOARCH=$(shell go env GOARCH) \
 		go build -ldflags "-s -w" -o $(DISTDIR)/$(BINARY) ./...
+		upx $(DISTDIR)/$(BINARY)
 
 $(DISTDIR):
 	@mkdir -p $(DISTDIR)
