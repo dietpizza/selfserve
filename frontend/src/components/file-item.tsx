@@ -20,7 +20,7 @@ function getIconForMimetype(mimetype: string): string {
   }
 }
 
-type FileItemProps = { meta: FileMetadata; highlight: boolean; onPress: (meta: FileMetadata) => void };
+type FileItemProps = { meta: FileMetadata; highlight: boolean; onPress?: () => void };
 
 export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) => {
   const { filename, size, mtime } = meta;
@@ -31,7 +31,10 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
       className={`flex items-center py-3 px-3.5 focus:bg-slate-700 hover:bg-slate-700 active:bg-slate-700 cursor-pointer ${
         highlight ? "bg-slate-700" : ""
       }`}
-      onClick={() => onPress(meta)}
+      onClick={(e) => {
+        e.preventDefault();
+        onPress?.();
+      }}
     >
       <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-2" />
       <div className="flex flex-col flex-1 ">
