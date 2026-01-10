@@ -86,8 +86,15 @@ func listFilesMetadata(path string) ([]FileMeta, error) {
 		})
 	}
 
-	// Sort by Mtime descending (newest first)
+	// Sort directories before files, then by Mtime descending (newest first)
 	sort.Slice(out, func(i, j int) bool {
+		// directories first
+		isDirI := out[i].MimeType == "directory"
+		isDirJ := out[j].MimeType == "directory"
+		if isDirI != isDirJ {
+			return isDirI // true comes first
+		}
+		// otherwise sort by mtime desc
 		return out[i].Mtime > out[j].Mtime
 	})
 
