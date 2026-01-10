@@ -1,68 +1,108 @@
+@import "tailwindcss";
+
+/* Sane defaults for the app shell */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --max-width: 72rem;
+  --content-padding: 1rem;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
+  @apply bg-slate-900 text-white antialiased h-screen w-screen max-h-screen max-w-screen flex justify-center;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 2rem auto;
+  padding: var(--content-padding);
+}
+
+a {
+  @apply text-sky-600 hover:underline;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  @apply font-semibold text-slate-900;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  @apply text-3xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+
+p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded bg-sky-600 text-white hover:bg-sky-700;
+  border: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+input,
+textarea,
+select {
+  @apply px-3 py-2 rounded border border-slate-200 bg-white;
+  outline: none;
+}
+
+code,
+pre {
+  @apply font-mono text-sm bg-slate-100 rounded p-1;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: var(--max-width);
+}
+
+.small-muted {
+  @apply text-sm text-slate-500;
+}
+
+/* Utility: visually-hidden for accessibility */
+.sr-only {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
+
+/* End defaults */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

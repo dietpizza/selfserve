@@ -8,8 +8,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// corsMiddleware returns a Gin middleware that allows any origin and common methods/headers.
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		// Handle preflight
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func runServer(staticRoot string, port int) error {
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(corsMiddleware())
+	// add logger similar to Default()
+	router.Use(gin.Logger())
 
 	api := router.Group("/api")
 	{
