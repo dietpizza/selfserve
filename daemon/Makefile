@@ -17,9 +17,8 @@ dev:
 
 
 prepare-web:
-	@echo "Copying frontend build into web/"
-	@rm -rf dist/web/*
-	@cp -r ../frontend/dist/. dist/web/
+	@echo "Building frontend assets..."
+	@cd ../frontend && bun run build
 
 release: clean | $(DISTDIR)
 	@echo "Building release binary into $(DISTDIR)/$(BINARY)"

@@ -1,0 +1,44 @@
+version: "3"
+
+vars:
+  BINARY: selfserve
+  DISTDIR: dist
+
+tasks:
+  help:
+    desc: Display available tasks
+    cmds:
+      - |
+        echo "Task targets:"
+        echo "  task dev          # run the service for development (go run)"
+        echo "  task release      # build optimized release binary into {{.DISTDIR}}/"
+        echo "  task clean        # remove built artifacts"
+        echo "  task prepare-web  # copy frontend build into web/"
+
+  prepare-web:
+    desc: Copy frontend build into dist/web
+    cmds:
+      - echo "Copying frontend build into web/"
+      - cd ../frontend && bun run build
+
+  dev:
+    desc: Run the service for development (go run)
+    cmds:
+      - task: prepare-web
+      - echo "Starting development server..."
+      - go run .
+
+  release:
+    desc: Build optimized release binary into ${DISTDIR}/
+    cmds:
+      - task: clean
+      - task: prepare-web
+      - mkdir -p {{.DISTDIR}}
+      - CGO_ENABLED=0 GOOS=$(go env GOOS) GOARCH=$(go env GOARCH) go build -ldflags "-s -w" -o {{.DISTDIR}}/{{.BINARY}} ./...
+      - upx {{.DISTDIR}}/{{.BINARY}}
+
+  clean:
+    desc: Remove built artifacts
+    cmds:
+      - echo "Cleaning..."
+      - rm -rf {{.DISTDIR}}
