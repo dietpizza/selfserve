@@ -51,8 +51,8 @@ export function Gallery({ images, onDeleteImage }: GalleryProps) {
   }
 
   return (
-    <div className="h-screen w-screen max-h-screen md:max-w-3xl no-scrollbar">
-      <VList className="h-screen max-h-screen w-screen no-scrollbar" itemSize={60}>
+    <div className="h-screen max-h-screen md:max-w-3xl no-scrollbar">
+      <VList className="h-screen max-h-screen no-scrollbar" itemSize={60}>
         {images.map((image, index) => {
           return (
             <FileItem

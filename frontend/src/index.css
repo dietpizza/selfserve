@@ -13,7 +13,7 @@ body,
 }
 
 body {
-  @apply bg-slate-900 text-white antialiased h-screen w-screen max-h-screen max-w-screen flex justify-center;
+  @apply bg-slate-900 text-white antialiased h-screen max-h-screen max-w-screen flex justify-center;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.6;

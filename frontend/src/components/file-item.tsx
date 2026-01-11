@@ -1,27 +1,10 @@
-import type { FileMetadata } from "../types";
-import ic_photo from "../assets/ic_photo.svg";
-import ic_video from "../assets/ic_video.svg";
-import ic_document from "../assets/ic_document.svg";
-import ic_folder from "../assets/ic_folder.svg";
-import ic_unknown from "../assets/ic_unknown.svg";
-import type React from "react";
+import React from "react";
+import { getIconForMimetype } from "../utils";
+import ic_delete from "../assets/ic_delete.svg";
 
-function getIconForMimetype(mimetype: string): string {
-  if (mimetype.startsWith("image/")) {
-    return ic_photo;
-  } else if (mimetype.startsWith("video/")) {
-    return ic_video;
-  } else if (mimetype.startsWith("text/")) {
-    return ic_document;
-  } else if (mimetype === "directory") {
-    return ic_folder;
-  } else {
-    return ic_unknown;
-  }
-}
+import type { FileMetadata } from "../types";
 
 type FileItemProps = { meta: FileMetadata; highlight: boolean; onPress?: () => void };
-
 export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) => {
   const { filename, size, mtime } = meta;
   const infoString = [new Date(mtime * 1000).toLocaleString(), humanFileSize(size)].join(" · ");
@@ -38,10 +21,11 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
       }}
     >
       <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-2" />
-      <div className="flex flex-col flex-1 ">
+      <div className="flex flex-1 flex-col justify-start min-w-0">
         <span className="text-md truncate font-medium text-white font-mono">{filename}</span>
-        <span className="text-xs text-gray-300">{infoString}</span>
+        <span className="text-xs text-gray-300 truncate">{infoString}</span>
       </div>
+      <img src={ic_delete} className="w-6 h-6 inline-block ml-2" />
     </div>
   );
 };
