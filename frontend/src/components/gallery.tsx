@@ -2,7 +2,7 @@ import type { FileMetadata } from "../types";
 
 import { getSpotlightSource } from "../utils";
 import { FileItem } from "./file-item";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VList } from "virtua";
 
 type GalleryProps = {
@@ -21,19 +21,19 @@ export function Gallery({ images, onDeleteImage }: GalleryProps) {
 
   const spotlightSources = useMemo(() => images.map(getSpotlightSource), [images]);
 
+  const deleteCurrentImage = useCallback(() => {
+    if (currentImage) {
+      onDeleteImage(currentImage);
+    }
+  }, [currentImage, onDeleteImage]);
+
   useEffect(() => {
     if (isInit.current) return;
 
     // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
     Spotlight.init();
     // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
-    Spotlight.addControl("delete", function (event) {
-      const isDeleteConfirmed = confirm("Delete this image?");
-      if (isDeleteConfirmed) {
-        // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
-        onDeleteImage(images[Spotlight.currentIndex()]);
-      }
-    });
+    Spotlight.addControl("delete", deleteCurrentImage);
 
     isInit.current = true;
   }, []);
@@ -57,9 +57,10 @@ export function Gallery({ images, onDeleteImage }: GalleryProps) {
           return (
             <FileItem
               key={image.filename}
-              onPress={() => openSpotlight(index)}
               meta={image}
               highlight={image.filename === currentImage?.filename}
+              onPress={() => openSpotlight(index)}
+              onDelete={() => onDeleteImage(image)}
             />
           );
         })}

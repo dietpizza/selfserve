@@ -1,25 +1,23 @@
-import type React from "react";
-import { useDirectoryListing } from "./utils";
+import React, { useState, useMemo } from "react";
+import { deleteFile, useDirectoryListing } from "./utils";
 import { Gallery } from "./components";
-import { useState, useMemo } from "react";
+
 import type { FileMetadata } from "./types";
 
 export const ListingPage: React.FC = () => {
-  const { files, loading, error } = useDirectoryListing("/");
-  const [selectedFileIndex, setSelectedFileIndex] = useState<number>(-1);
-  // const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-
-  // const onPressFile = (idx: number) => {
-  //   setSelectedFileIndex(idx);
-  //   setIsPreviewVisible(true);
-  // };
+  const { files, refetch, loading, error } = useDirectoryListing("/");
 
   const images = useMemo(() => {
     return files.filter((f) => f.mimetype.startsWith("image/"));
-  }, [files, selectedFileIndex]);
+  }, [files]);
 
-  function onDeleteImage(image: FileMetadata) {
-    // TODO: Implement delete functionality
+  async function onDeleteImage(image: FileMetadata) {
+    const isDeleteConfirmed = confirm("Delete this image bitch?");
+    console.info("Is delete confirmed:", isDeleteConfirmed, image);
+    if (isDeleteConfirmed) {
+      await deleteFile(image.relative_path);
+      refetch();
+    }
   }
 
   return (

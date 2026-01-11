@@ -4,8 +4,14 @@ import ic_delete from "../assets/ic_delete.svg";
 
 import type { FileMetadata } from "../types";
 
-type FileItemProps = { meta: FileMetadata; highlight: boolean; onPress?: () => void };
-export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) => {
+type FileItemProps = {
+  meta: FileMetadata;
+  highlight: boolean;
+  onPress?: () => void;
+  onDelete?: () => void;
+};
+
+export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, onDelete }) => {
   const { filename, size, mtime } = meta;
   const infoString = [new Date(mtime * 1000).toLocaleString(), humanFileSize(size)].join(" · ");
 
@@ -16,7 +22,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
         highlight ? "bg-slate-700" : ""
       }`}
       onClick={(e) => {
-        e.preventDefault();
+        e.stopPropagation();
         onPress?.();
       }}
     >
@@ -25,7 +31,14 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
         <span className="text-md truncate font-medium text-white font-mono">{filename}</span>
         <span className="text-xs text-gray-300 truncate">{infoString}</span>
       </div>
-      <img src={ic_delete} className="w-6 h-6 inline-block ml-2" />
+      <img
+        src={ic_delete}
+        className="w-6 h-6 inline-block ml-2"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete?.();
+        }}
+      />
     </div>
   );
 };

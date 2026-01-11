@@ -33,5 +33,6 @@ export function useDirectoryListing(path: string) {
     files: files,
     loading: isLoading,
     error: error,
+    refetch: getFiles,
   };
 }
