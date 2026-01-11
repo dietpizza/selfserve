@@ -1,4 +1,4 @@
-import { type ReactNode, type TransitionEvent, useEffect, useId, useState } from "react";
+import { type CSSProperties, type ReactNode, type TransitionEvent, useEffect, useId, useState } from "react";
 
 type DialogProps = {
   title: string;
@@ -27,21 +27,21 @@ export function Dialog({
   const descriptionId = useId();
 
   useEffect(() => {
-    let rafId: number | null = null;
-
     if (isVisible) {
       setShouldRender(true);
-      rafId = window.requestAnimationFrame(() => setIsActive(true));
     } else {
       setIsActive(false);
     }
-
-    return () => {
-      if (rafId !== null) {
-        window.cancelAnimationFrame(rafId);
-      }
-    };
   }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible || !shouldRender || isActive) {
+      return;
+    }
+
+    const rafId = window.requestAnimationFrame(() => setIsActive(true));
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isActive, isVisible, shouldRender]);
 
   useEffect(() => {
     if (isActive || isVisible || !shouldRender) {
@@ -76,12 +76,21 @@ export function Dialog({
     }
   }
 
-  const overlayState = isActive ? "opacity-100" : "opacity-0";
-  const panelState = isActive ? "opacity-100 scale-100" : "opacity-0 scale-95";
+  const overlayStyles: CSSProperties = {
+    opacity: isActive ? 1 : 0,
+    transition: "opacity 220ms ease-out",
+  };
+
+  const panelStyles: CSSProperties = {
+    opacity: isActive ? 1 : 0,
+    transform: isActive ? "scale(1)" : "scale(0.95)",
+    transition: "opacity 220ms ease-out, transform 220ms ease-out",
+  };
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-200 ease-out ${overlayState}`}
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-slate-900/60 backdrop-blur-sm"
+      style={overlayStyles}
       onClick={() => {
         if (closeOnBackdrop) {
           onCancel();
@@ -95,7 +104,8 @@ export function Dialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className={`w-full max-w-md transform rounded-2xl bg-slate-800 px-6 py-6 shadow-lg text-slate-900 transition duration-200 ease-out ${panelState}`}
+        className="w-full max-w-md transform rounded-2xl bg-slate-800 px-6 py-6 shadow-lg text-slate-900"
+        style={panelStyles}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex flex-col">
