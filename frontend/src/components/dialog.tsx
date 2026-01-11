@@ -104,7 +104,7 @@ export function Dialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className="w-full max-w-md transform rounded-2xl bg-slate-800 px-6 py-6 shadow-lg text-slate-900"
+        className="w-full max-w-md transform rounded-2xl bg-slate-800 px-6 py-6 shadow-md text-slate-900"
         style={panelStyles}
         onClick={(event) => event.stopPropagation()}
       >
