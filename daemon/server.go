@@ -38,6 +38,7 @@ func runServer(staticRoot string, port int) error {
 	{
 		api.GET("/health", healthHandler)
 		api.GET("/list/*path", dirListHandler(staticRoot))
+		api.POST("/delete", deleteHandler(staticRoot))
 	}
 
 	// Expose files beneath staticRoot at /files

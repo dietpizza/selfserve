@@ -30,17 +30,28 @@ func staticRootJoin(root, rel string) (string, error) {
 	return joined, nil
 }
 
-// FileMeta contains file metadata for responses.
-type FileMeta struct {
-	Filename string `json:"filename"`
-	Mtime    int64  `json:"mtime"`
-	Ctime    int64  `json:"ctime"`
-	MimeType string `json:"mimetype"`
-	Size     int64  `json:"size"`
+func normalizeRootPath(path string) string {
+	if path == "" || path == "/" {
+		return "/"
+	}
+	if path[0] != '/' {
+		return "/" + path
+	}
+	return path
 }
 
-func listFilesMetadata(path string) ([]FileMeta, error) {
-	f, err := os.Open(path)
+// FileMeta contains file metadata for responses.
+type FileMeta struct {
+	Filename     string `json:"filename"`
+	RelativePath string `json:"relative_path"`
+	Mtime        int64  `json:"mtime"`
+	Ctime        int64  `json:"ctime"`
+	MimeType     string `json:"mimetype"`
+	Size         int64  `json:"size"`
+}
+
+func listFilesMetadata(fsPath string, webPath string) ([]FileMeta, error) {
+	f, err := os.Open(fsPath)
 	if err != nil {
 		return nil, err
 	}
@@ -77,13 +88,18 @@ func listFilesMetadata(path string) ([]FileMeta, error) {
 			}
 		}
 
-		out = append(out, FileMeta{
-			Filename: fi.Name(),
-			Mtime:    fi.ModTime().Unix(),
-			Ctime:    ctime,
-			MimeType: mimeType,
-			Size:     size,
-		})
+		webFilePath := filepath.Join(webPath, fi.Name())
+
+		meta := FileMeta{
+			Filename:     fi.Name(),
+			Mtime:        fi.ModTime().Unix(),
+			Ctime:        ctime,
+			MimeType:     mimeType,
+			Size:         size,
+			RelativePath: webFilePath,
+		}
+
+		out = append(out, meta)
 	}
 
 	// Sort directories before files, then by Mtime descending (newest first)
@@ -99,4 +115,8 @@ func listFilesMetadata(path string) ([]FileMeta, error) {
 	})
 
 	return out, nil
+}
+
+func deleteFile(path string) error {
+	return os.RemoveAll(path)
 }

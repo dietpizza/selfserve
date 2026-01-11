@@ -23,7 +23,7 @@ export const ListingPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-800 py-2 h-screen w-screen max-h-screen md:max-w-prose no-scrollbar flex flex-col overflow-y-auto">
+    <div className="bg-slate-800 h-screen w-screen max-h-screen md:max-w-3xl no-scrollbar flex flex-col overflow-y-auto">
       <div className="flex flex-col gap-2">
         <Gallery images={images || []} onDeleteImage={onDeleteImage} />
       </div>

@@ -28,6 +28,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress }) 
 
   return (
     <div
+      style={{ height: "60px" }}
       className={`flex items-center py-3 px-3.5 focus:bg-slate-700 hover:bg-slate-700 active:bg-slate-700 cursor-pointer ${
         highlight ? "bg-slate-700" : ""
       }`}

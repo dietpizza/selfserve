@@ -18,7 +18,7 @@ tasks:
   prepare-web:
     desc: Copy frontend build into dist/web
     cmds:
-      - echo "Copying frontend build into web/"
+      - echo "Building frontend..."
       - cd ../frontend && bun run build
 
   dev:

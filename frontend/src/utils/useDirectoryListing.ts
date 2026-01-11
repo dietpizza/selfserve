@@ -1,13 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import type { FileMetadata } from "../types";
+import { useEventListener } from "usehooks-ts";
 
 export function useDirectoryListing(path: string) {
   const [files, setFiles] = useState<FileMetadata[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // @ts-expect-error
+  useEventListener("visibilitychange", getFiles);
+
   async function getFiles() {
+    if (document.visibilityState === "hidden") return;
+
+    console.info("Fetching directory listing for", path);
     setIsLoading(true);
     try {
       const data = await axios.get(`/api/list/${encodeURIComponent(path)}`);
