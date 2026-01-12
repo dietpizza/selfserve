@@ -74,12 +74,12 @@ const Breadcrumbs: React.FC<{ path: string[] }> = ({ path }) => {
         ) : (
           <>
             <img src={ic_chevron_right} alt=">" className="w-4 h-4 mx-2" />
-            <span className="text-sm font-medium text-on-primary-container">{e}</span>
+            <span className="text-sm font-medium text-on-surface-variant">{e}</span>
           </>
         )}
       </div>
     );
   });
 
-  return <div className="flex items-center w-full bg-primary-container p-3 px-5.5">{segments}</div>;
+  return <div className="flex items-center w-full bg-surface-variant p-3 px-5.5">{segments}</div>;
 };

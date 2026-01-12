@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { cn, getIconForMimetype, humanFileSize } from "../utils";
 import ic_delete from "../assets/ic_delete.svg";
 
@@ -13,14 +13,17 @@ type FileItemProps = {
 
 export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, onDelete }) => {
   const { filename, size, mtime } = meta;
-  const infoString = [new Date(mtime * 1000).toLocaleString(), humanFileSize(size)].join(" · ");
+
+  const infoString = useMemo(() => {
+    return [new Date(mtime * 1000).toLocaleString(), size && humanFileSize(size)].filter(Boolean).join(" · ");
+  }, [mtime, size]);
 
   return (
     <div
       style={{ height: "60px" }}
       className={cn(
-        `flex items-center py-3 px-4 hover:bg-surface-container cursor-pointer select-none`,
-        highlight && "bg-secondary-container"
+        `flex items-center py-3 px-4 hover:bg-surface-variant cursor-pointer select-none`,
+        highlight && "bg-surface"
       )}
       onClick={(e) => {
         e.stopPropagation();

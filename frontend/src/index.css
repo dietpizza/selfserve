@@ -94,9 +94,7 @@
 html,
 body,
 #root {
-  height: 100%;
-  display: flex;
-  justify-content: center;
+  @apply flex justify-center h-full;
 }
 
 body {
@@ -125,8 +123,6 @@ h2,
 h3,
 h4 {
   @apply font-semibold text-on-surface;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
 }
 
 h1 {
@@ -143,20 +139,17 @@ h4 {
 }
 
 p {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  @apply mt-0.5 mb-0.5;
 }
 
 button {
-  @apply inline-flex items-center gap-2 px-4 py-2 rounded bg-primary text-on-primary hover:opacity-90;
-  border: none;
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded bg-primary text-on-primary hover:opacity-90 border-none;
 }
 
 input,
 textarea,
 select {
-  @apply px-3 py-2 rounded border border-outline bg-surface-container text-on-surface;
-  outline: none;
+  @apply px-3 py-2 rounded border border-outline bg-surface-container text-on-surface outline-none;
 }
 
 code,
@@ -165,10 +158,7 @@ pre {
 }
 
 .container {
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  @apply ml-auto mr-auto pl-1 pr-1;
   max-width: var(--max-width);
 }
 

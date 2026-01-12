@@ -19,13 +19,13 @@ type FileListProps = {
 };
 
 export function FileList({ files, onDeleteFile }: FileListProps) {
-  const [currentImage, setCurrentImage] = useState<FileMetadata | null>(null);
+  const [lastOpenedFile, setLastOpenedFile] = useState<FileMetadata | null>(null);
   const isInit = useRef(false);
   const ref = useRef<VListHandle>(null);
 
   // Spotlight is 1-indexed
   function onImageChange(spotIndex: number) {
-    setCurrentImage(files[spotIndex - 1]);
+    setLastOpenedFile(spotlightSources[spotIndex - 1].file);
     ref.current?.scrollToIndex(spotIndex - 1, { align: "center", smooth: false });
   }
 
@@ -40,10 +40,8 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
     isInit.current = true;
   }, []);
 
-  function openSpotlight(listIndex: number) {
-    const indexInSpotlightSources = spotlightSources.findIndex(
-      (source) => source.file.filename === files[listIndex].filename
-    );
+  function openSpotlight(file: FileMetadata) {
+    const indexInSpotlightSources = spotlightSources.findIndex((source) => source.file.filename === file.filename);
     // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
     Spotlight.show(spotlightSources, {
       index: indexInSpotlightSources + 1,
@@ -63,14 +61,15 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
     });
   }
 
-  function handleFileClick(index: number) {
-    const _file = files[index];
-    if (isImageFile(_file)) {
-      openSpotlight(index);
+  function handleFileClick(item: FileMetadata) {
+    setLastOpenedFile(item);
+
+    if (isImageFile(item)) {
+      openSpotlight(item);
     }
 
-    if (isDirectory(_file)) {
-      const newPath = "/home" + _file.relative_path;
+    if (isDirectory(item)) {
+      const newPath = "/home" + item.relative_path;
       history.pushState({}, "", newPath);
     }
   }
@@ -78,14 +77,14 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
   return (
     <div className="flex flex-1 bg-surface-container md:max-w-3xl no-scrollbar">
       <VList ref={ref} className="h-full no-scrollbar" itemSize={60}>
-        {files.map((image, index) => {
+        {files.map((file) => {
           return (
             <FileItem
-              key={image.filename}
-              meta={image}
-              highlight={image.filename === currentImage?.filename}
-              onPress={() => handleFileClick(index)}
-              onDelete={() => onDeleteFile(image)}
+              key={file.filename}
+              meta={file}
+              highlight={file.filename === lastOpenedFile?.filename}
+              onPress={() => handleFileClick(file)}
+              onDelete={() => onDeleteFile(file)}
             />
           );
         })}
