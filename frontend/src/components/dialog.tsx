@@ -89,7 +89,7 @@ export function Dialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-slate-900/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-black/60 backdrop-blur-sm"
       style={overlayStyles}
       onClick={() => {
         if (closeOnBackdrop) {
@@ -104,29 +104,29 @@ export function Dialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className="w-full max-w-md transform rounded-2xl bg-slate-800 px-6 py-6 shadow-md text-slate-900"
+        className="w-full max-w-md transform rounded-2xl bg-surface-container px-6 py-6 shadow-md text-on-surface"
         style={panelStyles}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex flex-col">
-          <p id={titleId} className="text-xl font-semibold tracking-tight text-slate-300">
+          <p id={titleId} className="text-xl font-semibold tracking-tight text-on-surface">
             {title}
           </p>
           {description ? (
-            <p id={descriptionId} className="text-sm text-slate-300 leading-1">
+            <p id={descriptionId} className="text-sm text-on-surface-variant leading-1">
               {description}
             </p>
           ) : null}
         </header>
         <footer className="mt-6 flex justify-end gap-2 text-sm font-medium">
           <div
-            className="rounded-full px-5 py-2 text-slate-200 shadow-sm transition bg-slate-700 hover:bg-slate-600 cursor-pointer"
+            className="rounded-full px-5 py-2 text-on-secondary-container shadow-sm transition bg-secondary-container hover:opacity-80 cursor-pointer"
             onClick={onCancel}
           >
             {cancelLabel.toUpperCase()}
           </div>
           <div
-            className="rounded-full px-5 py-2 text-slate-200 shadow-sm transition bg-red-800 hover:bg-red-700 cursor-pointer"
+            className="rounded-full px-5 py-2 text-on-error shadow-sm transition bg-error hover:opacity-80 cursor-pointer"
             onClick={onConfirm}
           >
             {confirmLabel.toUpperCase()}

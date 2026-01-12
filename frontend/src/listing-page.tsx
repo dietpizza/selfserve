@@ -28,7 +28,7 @@ export const ListingPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-800 w-screen max-h-screen md:max-w-3xl no-scrollbar flex flex-col overflow-y-auto">
+    <div className="w-screen max-h-screen md:max-w-3xl no-scrollbar flex flex-col overflow-y-auto">
       <Gallery images={images || []} onDeleteImage={onDeleteImage} />
       <Dialog
         title={"Delete File?"}

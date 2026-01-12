@@ -1,9 +1,94 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: var(--md-sys-color-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+  --color-error: var(--md-sys-color-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+
+  --color-surface: var(--md-sys-color-surface);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+}
+
 /* Sane defaults for the app shell */
 :root {
   --max-width: 72rem;
   --content-padding: 1rem;
+
+  /* M3 Light Theme */
+  --md-sys-color-primary: #6750a4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #eaddff;
+  --md-sys-color-on-primary-container: #21005d;
+  --md-sys-color-secondary: #625b71;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #e8def8;
+  --md-sys-color-on-secondary-container: #1d192b;
+  --md-sys-color-tertiary: #7d5260;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #ffd8e4;
+  --md-sys-color-on-tertiary-container: #31111d;
+  --md-sys-color-error: #b3261e;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #f9dedc;
+  --md-sys-color-on-error-container: #410e0b;
+  --md-sys-color-surface: #fef7ff;
+  --md-sys-color-on-surface: #1d1b20;
+  --md-sys-color-surface-container: #f3edf7;
+  --md-sys-color-surface-variant: #e7e0ec;
+  --md-sys-color-on-surface-variant: #49454f;
+  --md-sys-color-outline: #79747e;
+  --md-sys-color-outline-variant: #cac4d0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* M3 Dark Theme */
+    --md-sys-color-primary: #d0bcff;
+    --md-sys-color-on-primary: #381e72;
+    --md-sys-color-primary-container: #4f378b;
+    --md-sys-color-on-primary-container: #eaddff;
+    --md-sys-color-secondary: #ccc2dc;
+    --md-sys-color-on-secondary: #332d41;
+    --md-sys-color-secondary-container: #4a4458;
+    --md-sys-color-on-secondary-container: #e8def8;
+    --md-sys-color-tertiary: #efb8c8;
+    --md-sys-color-on-tertiary: #492532;
+    --md-sys-color-tertiary-container: #633b48;
+    --md-sys-color-on-tertiary-container: #ffd8e4;
+    --md-sys-color-error: #f2b8b5;
+    --md-sys-color-on-error: #601410;
+    --md-sys-color-error-container: #8c1d18;
+    --md-sys-color-on-error-container: #f9dedc;
+    --md-sys-color-surface: #141218;
+    --md-sys-color-on-surface: #e6e1e5;
+    --md-sys-color-surface-container: #211f26;
+    --md-sys-color-surface-variant: #49454f;
+    --md-sys-color-on-surface-variant: #cac4d0;
+    --md-sys-color-outline: #938f99;
+    --md-sys-color-outline-variant: #49454f;
+  }
 }
 
 html,
@@ -13,7 +98,7 @@ body,
 }
 
 body {
-  @apply bg-slate-900 text-white antialiased h-screen max-h-screen max-w-screen flex justify-center;
+  @apply bg-surface text-on-surface antialiased h-screen max-h-screen max-w-screen flex justify-center;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.6;
@@ -30,14 +115,14 @@ main {
 }
 
 a {
-  @apply text-sky-600 hover:underline;
+  @apply text-primary hover:underline;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  @apply font-semibold text-slate-900;
+  @apply font-semibold text-on-surface;
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
 }
@@ -61,20 +146,20 @@ p {
 }
 
 button {
-  @apply inline-flex items-center gap-2 px-4 py-2 rounded bg-sky-600 text-white hover:bg-sky-700;
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded bg-primary text-on-primary hover:opacity-90;
   border: none;
 }
 
 input,
 textarea,
 select {
-  @apply px-3 py-2 rounded border border-slate-200 bg-white;
+  @apply px-3 py-2 rounded border border-outline bg-surface-container text-on-surface;
   outline: none;
 }
 
 code,
 pre {
-  @apply font-mono text-sm bg-slate-100 rounded p-1;
+  @apply font-mono text-sm bg-surface-variant text-on-surface-variant rounded p-1;
 }
 
 .container {
@@ -86,7 +171,7 @@ pre {
 }
 
 .small-muted {
-  @apply text-sm text-slate-500;
+  @apply text-sm text-on-surface-variant;
 }
 
 /* Utility: visually-hidden for accessibility */
@@ -105,9 +190,4 @@ pre {
 /* End defaults */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-.spl-delete {
-  @apply bg-red-500;
-  background-image: url(assets/ic_delete.svg);
 }

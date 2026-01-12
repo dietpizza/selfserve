@@ -1,5 +1,5 @@
 import React from "react";
-import { getIconForMimetype } from "../utils";
+import { cn, getIconForMimetype, humanFileSize } from "../utils";
 import ic_delete from "../assets/ic_delete.svg";
 
 import type { FileMetadata } from "../types";
@@ -18,9 +18,10 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
   return (
     <div
       style={{ height: "60px" }}
-      className={`flex items-center py-3 px-3.5 focus:bg-slate-700 hover:bg-slate-700 active:bg-slate-700 cursor-pointer ${
-        highlight ? "bg-slate-700" : ""
-      }`}
+      className={cn(
+        `flex items-center py-3 px-3.5 hover:bg-surface-container cursor-pointer`,
+        highlight && "bg-secondary-container"
+      )}
       onClick={(e) => {
         e.stopPropagation();
         onPress?.();
@@ -28,8 +29,8 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
     >
       <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-2" />
       <div className="flex flex-1 flex-col justify-start min-w-0">
-        <span className="text-md truncate font-medium text-white font-mono">{filename}</span>
-        <span className="text-xs text-gray-300 truncate">{infoString}</span>
+        <span className="text-md truncate font-medium text-on-surface font-mono">{filename}</span>
+        <span className="text-xs text-on-surface-variant truncate">{infoString}</span>
       </div>
       <img
         src={ic_delete}
@@ -42,9 +43,3 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
     </div>
   );
 };
-
-function humanFileSize(size: number): string {
-  const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  return (size / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
-}
