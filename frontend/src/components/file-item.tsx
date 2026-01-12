@@ -19,7 +19,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
     <div
       style={{ height: "60px" }}
       className={cn(
-        `flex items-center py-3 px-3.5 hover:bg-surface-container cursor-pointer`,
+        `flex items-center py-3 px-4 hover:bg-surface-container cursor-pointer select-none`,
         highlight && "bg-secondary-container"
       )}
       onClick={(e) => {
@@ -27,7 +27,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
         onPress?.();
       }}
     >
-      <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-2" />
+      <img src={getIconForMimetype(meta.mimetype)} className="w-8 h-8 inline-block mr-4" />
       <div className="flex flex-1 flex-col justify-start min-w-0">
         <span className="text-md truncate font-medium text-on-surface font-mono">{filename}</span>
         <span className="text-xs text-on-surface-variant truncate">{infoString}</span>
