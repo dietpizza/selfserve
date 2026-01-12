@@ -14,7 +14,6 @@ export function useDirectoryListing(path: string) {
   async function getFiles() {
     if (document.visibilityState === "hidden") return;
 
-    console.info("Fetching directory listing for", path);
     setIsLoading(true);
     try {
       const data = await axios.get(`/api/list/${encodeURIComponent(path)}`);
@@ -30,7 +29,7 @@ export function useDirectoryListing(path: string) {
   }, [path]);
 
   return {
-    files: files,
+    files: files || [],
     loading: isLoading,
     error: error,
     refetch: getFiles,

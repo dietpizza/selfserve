@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -44,6 +45,10 @@ func runServer(staticRoot string, port int) error {
 	// Expose files beneath staticRoot at /files
 	router.StaticFS("/files", gin.Dir(staticRoot, false))
 
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/home")
+	})
+
 	// Serve embedded React build at /
 	buildFS := ReactBuildFS()
 
@@ -54,18 +59,22 @@ func runServer(staticRoot string, port int) error {
 	router.NoRoute(func(c *gin.Context) {
 		// use request URL path
 		reqPath := c.Request.URL.Path
-		if reqPath == "/" || reqPath == "" {
-			reqPath = "/index.html"
+
+		if len(reqPath) > 1 {
+			f, err := buildFS.Open(reqPath[1:])
+			if err == nil {
+				defer f.Close()
+				if fi, fiErr := f.Stat(); fiErr == nil && !fi.IsDir() {
+					// serve the file
+					fsHandler.ServeHTTP(c.Writer, c.Request)
+					return
+				}
+			}
 		}
 
-		f, err := buildFS.Open(reqPath[1:])
-		if err == nil {
-			defer f.Close()
-			if fi, fiErr := f.Stat(); fiErr == nil && !fi.IsDir() {
-				// serve the file
-				fsHandler.ServeHTTP(c.Writer, c.Request)
-				return
-			}
+		if reqPath != "/home" && !strings.HasPrefix(reqPath, "/home/") {
+			c.String(404, "not found")
+			return
 		}
 
 		// fallback to index.html

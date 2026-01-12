@@ -1,7 +1,7 @@
 import type { FileMetadata } from "../types";
 
 export function getSpotlightSource(file: FileMetadata) {
-  return { src: `/files/${encodeURIComponent(file.filename)}` };
+  return { file, src: `/files/${encodeURIComponent(file.filename)}` };
 }
 
 export function cn(...classes: (string | false | null | undefined)[]): string {

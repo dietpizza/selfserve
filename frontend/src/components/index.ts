@@ -1,4 +1,3 @@
 export * from "./file-item";
-export * from "./gallery";
-export * from "./dialog";
+export * from "./listing";
 export * from "./dialog";
