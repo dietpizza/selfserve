@@ -1,6 +1,6 @@
 import type { FileMetadata } from "../types";
 
-import { getSpotlightSource } from "../utils";
+import { getSpotlightSource, shuffleList } from "../utils";
 import { FileItem } from "./file-item";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VList, type VListHandle } from "virtua";
@@ -18,7 +18,7 @@ export function Gallery({ images, onDeleteImage }: GalleryProps) {
   // Spotlight is 1-indexed
   function onImageChange(spotIndex: number) {
     setCurrentImage(images[spotIndex - 1]);
-    ref.current?.scrollToIndex(spotIndex - 1, { align: "start", offset: -(60 * 4), smooth: false });
+    ref.current?.scrollToIndex(spotIndex - 1, { align: "center", smooth: false });
   }
 
   const spotlightSources = useMemo(() => images.map(getSpotlightSource), [images]);
@@ -33,11 +33,19 @@ export function Gallery({ images, onDeleteImage }: GalleryProps) {
   }, []);
 
   function openSpotlight(listIndex: number) {
-    console.info("Opening spotlight at index", listIndex);
-    setCurrentImage(images[listIndex]);
     // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
     Spotlight.show(spotlightSources, {
       index: listIndex + 1,
+      onchange: onImageChange,
+      autohide: false,
+      autofit: false,
+    });
+  }
+
+  function slideShow() {
+    // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
+    Spotlight.show(shuffleList(spotlightSources), {
+      index: 1,
       onchange: onImageChange,
       autohide: false,
       autofit: false,

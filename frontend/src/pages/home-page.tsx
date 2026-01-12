@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useRef } from "react";
-import { deleteFile, useDirectoryListing } from "./utils";
-import { Dialog, Gallery } from "./components";
+import { Dialog, Gallery } from "../components";
+import { useDirectoryListing } from "../hooks";
+import { deleteFile } from "../utils";
 
-import type { FileMetadata } from "./types";
+import type { FileMetadata } from "../types";
 
-export const ListingPage: React.FC = () => {
+export const HomePage: React.FC = () => {
   const { files, refetch, loading, error } = useDirectoryListing("/");
   const [isDeleteDialogVisible, setIsDeleteDialogVisible] = useState(false);
 

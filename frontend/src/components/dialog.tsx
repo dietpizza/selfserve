@@ -1,4 +1,5 @@
 import { type CSSProperties, type ReactNode, type TransitionEvent, useEffect, useId, useState } from "react";
+import { Button } from "./button";
 
 type DialogProps = {
   title: string;
@@ -119,18 +120,8 @@ export function Dialog({
           ) : null}
         </header>
         <footer className="mt-6 flex justify-end gap-2 text-sm font-medium">
-          <div
-            className="rounded-full px-5 py-2 text-on-secondary-container shadow-sm transition bg-secondary-container hover:opacity-80 cursor-pointer"
-            onClick={onCancel}
-          >
-            {cancelLabel.toUpperCase()}
-          </div>
-          <div
-            className="rounded-full px-5 py-2 text-on-error shadow-sm transition bg-error hover:opacity-80 cursor-pointer"
-            onClick={onConfirm}
-          >
-            {confirmLabel.toUpperCase()}
-          </div>
+          <Button variant="secondary" label={cancelLabel} onClick={onCancel} />
+          <Button variant="error" label={confirmLabel} onClick={onConfirm} />
         </footer>
       </section>
     </div>
