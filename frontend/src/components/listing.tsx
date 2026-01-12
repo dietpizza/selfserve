@@ -5,6 +5,8 @@ import { FileItem } from "./file-item";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VList, type VListHandle } from "virtua";
 
+import art_empty from "../assets/art_empty.svg";
+
 function isImageFile(file: FileMetadata) {
   return file.mimetype.startsWith("image/");
 }
@@ -76,19 +78,26 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
 
   return (
     <div className="flex flex-1 bg-surface-container md:max-w-3xl no-scrollbar">
-      <VList ref={ref} className="h-full no-scrollbar" itemSize={60}>
-        {files.map((file) => {
-          return (
-            <FileItem
-              key={file.filename}
-              meta={file}
-              highlight={file.filename === lastOpenedFile?.filename}
-              onPress={() => handleFileClick(file)}
-              onDelete={() => onDeleteFile(file)}
-            />
-          );
-        })}
-      </VList>
+      {files.length == 0 ? (
+        <div className="flex flex-col flex-1 justify-center items-center">
+          <img src={art_empty} className="w-32 h-32 opacity-75" />
+          <span className="mt-8 text-xl text-on-surface-variant text-center px-4">No files found</span>
+        </div>
+      ) : (
+        <VList ref={ref} className="h-full no-scrollbar" itemSize={60}>
+          {files.map((file) => {
+            return (
+              <FileItem
+                key={file.filename}
+                meta={file}
+                highlight={file.filename === lastOpenedFile?.filename}
+                onPress={() => handleFileClick(file)}
+                onDelete={() => onDeleteFile(file)}
+              />
+            );
+          })}
+        </VList>
+      )}
     </div>
   );
 }
