@@ -22,7 +22,7 @@ export const FileItem: React.FC<FileItemProps> = ({ meta, highlight, onPress, on
     <div
       style={{ height: "60px" }}
       className={cn(
-        `flex items-center py-3 px-4 hover:bg-surface-variant cursor-pointer select-none`,
+        `flex items-center py-3 px-4 transition-colors hover:bg-surface-variant cursor-pointer select-none`,
         highlight && "bg-surface"
       )}
       onClick={(e) => {
