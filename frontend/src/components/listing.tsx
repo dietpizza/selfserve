@@ -47,7 +47,7 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
 
   function openSpotlight(file: FileMetadata) {
     const indexInSpotlightSources = spotlightSources?.findIndex((source) => source.file.filename === file.filename);
-    if (indexInSpotlightSources)
+    if (indexInSpotlightSources !== undefined)
       // @ts-expect-error spotlight is a global injected by spotlight.bundle.js
       Spotlight.show(spotlightSources, {
         index: indexInSpotlightSources + 1,
