@@ -4,7 +4,7 @@ import type { FileMetadata } from "../types";
 import { useEventListener } from "usehooks-ts";
 
 export function useDirectoryListing(path: string) {
-  const [files, setFiles] = useState<FileMetadata[]>([]);
+  const [files, setFiles] = useState<FileMetadata[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +29,7 @@ export function useDirectoryListing(path: string) {
   }, [path]);
 
   return {
-    files: files || [],
+    files: files,
     loading: isLoading,
     error: error,
     refetch: getFiles,
