@@ -84,7 +84,7 @@ export function FileList({ files, onDeleteFile }: FileListProps) {
           <span className="mt-8 text-xl text-on-surface-variant text-center px-4">No files found</span>
         </div>
       ) : (
-        <VList ref={ref} className="h-full no-scrollbar" itemSize={60}>
+        <VList ref={ref} className="h-full no-scrollbar">
           {files.map((file) => {
             return (
               <FileItem

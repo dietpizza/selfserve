@@ -1,10 +1,12 @@
-import { type CSSProperties, type ReactNode, type TransitionEvent, useEffect, useId, useState } from "react";
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+
 import { Button } from "./button";
-import { AnimatePresence } from "./animate-presence";
+import { cn } from "../utils";
 
 type DialogProps = {
   title: string;
-  description?: ReactNode;
+  description?: React.ReactNode;
   isVisible: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -23,12 +25,6 @@ export function Dialog({
   cancelLabel = "Cancel",
   closeOnBackdrop = true,
 }: DialogProps) {
-  const [shouldRender, setShouldRender] = useState(isVisible);
-  const [isActive, setIsActive] = useState(false);
-  const titleId = useId();
-  const descriptionId = useId();
-
-  // handle esc key to close dialog
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape" && isVisible) {
@@ -42,7 +38,6 @@ export function Dialog({
     };
   }, [isVisible, onCancel]);
 
-  // handle back for android chrome
   useEffect(() => {
     function handlePopState() {
       if (isVisible) {
@@ -57,43 +52,37 @@ export function Dialog({
   }, [isVisible, onCancel]);
 
   return (
-    <AnimatePresence show={isVisible} duration={220}>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-black/60 backdrop-blur-sm"
-        // style={overlayStyles}
-        onClick={() => {
-          if (closeOnBackdrop) {
-            onCancel();
-          }
-        }}
-        // onTransitionEnd={handleTransitionEnd}
-        role="presentation"
-      >
-        <section
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={description ? descriptionId : undefined}
-          className="w-full max-w-md transform rounded-2xl bg-surface-container px-6 py-6 shadow-md text-on-surface"
-          // style={panelStyles}
-          onClick={(event) => event.stopPropagation()}
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          key="box"
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={cn("fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-black/60 backdrop-blur-sm")}
+          onClick={() => closeOnBackdrop && onCancel()}
+          role="presentation"
         >
-          <header className="flex flex-col pb-2">
-            <p id={titleId} className="text-2xl font-semibold tracking-tight text-on-surface pb-4">
-              {title}
-            </p>
-            {description ? (
-              <p id={descriptionId} className="text-sm text-on-surface-variant leading-1">
-                {description}
-              </p>
-            ) : null}
-          </header>
-          <footer className="mt-6 flex justify-end gap-2 text-sm font-medium">
-            <Button variant="secondary" label={cancelLabel} onClick={onCancel} />
-            <Button variant="error" label={confirmLabel} onClick={onConfirm} />
-          </footer>
-        </section>
-      </div>
+          {isVisible && (
+            <motion.div
+              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0.8 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-full max-w-md transform rounded-2xl bg-surface-container px-6 py-6 shadow-md text-on-surface"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <header className="flex flex-col pb-2">
+                <p className="text-2xl font-semibold tracking-tight text-on-surface pb-4">{title}</p>
+                {description ? <p className="text-sm text-on-surface-variant leading-1">{description}</p> : null}
+              </header>
+              <footer className="mt-6 flex justify-end gap-2 text-sm font-medium">
+                <Button variant="secondary" label={cancelLabel} onClick={onCancel} />
+                <Button variant="error" label={confirmLabel} onClick={onConfirm} />
+              </footer>
+            </motion.div>
+          )}
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
