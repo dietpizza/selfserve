@@ -109,7 +109,7 @@ export function Dialog({
         style={panelStyles}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex flex-col">
+        <header className="flex flex-col pb-2">
           <p id={titleId} className="text-2xl font-semibold tracking-tight text-on-surface pb-4">
             {title}
           </p>

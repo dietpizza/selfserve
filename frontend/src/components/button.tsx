@@ -11,7 +11,7 @@ export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false
   return (
     <div
       className={cn(
-        "rounded-md px-5 py-2 font-semibold text-on-error shadow-sm transition hover:opacity-80 cursor-pointer",
+        "rounded-md px-5 py-2 text-sm font-semibold text-on-error shadow-sm transition hover:opacity-80 cursor-pointer",
         disabled && "opacity-50 cursor-not-allowed",
         variant === "primary" && "bg-primary text-on-primary",
         variant === "secondary" && "bg-secondary text-on-secondary",
