@@ -110,7 +110,7 @@ export function Dialog({
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex flex-col">
-          <p id={titleId} className="text-xl font-semibold tracking-tight text-on-surface">
+          <p id={titleId} className="text-2xl font-semibold tracking-tight text-on-surface pb-4">
             {title}
           </p>
           {description ? (

@@ -47,7 +47,6 @@ export const HomePage: React.FC = () => {
   async function onDeleteImage(image: FileMetadata) {
     fileToDelete.current = image;
     setIsDeleteDialogVisible(true);
-    history.pushState({}, "", "/home/keratin");
   }
 
   return (
