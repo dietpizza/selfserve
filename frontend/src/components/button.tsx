@@ -11,10 +11,10 @@ export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false
   return (
     <div
       className={cn(
-        "rounded-md px-5 py-2 text-sm font-semibold text-on-error shadow-sm transition hover:opacity-80 cursor-pointer",
+        "rounded-xl px-5 py-2.5 text-sm font-semibold text-on-error shadow-sm transition hover:opacity-80 cursor-pointer",
         disabled && "opacity-50 cursor-not-allowed",
         variant === "primary" && "bg-primary text-on-primary",
-        variant === "secondary" && "bg-secondary text-on-secondary",
+        variant === "secondary" && "bg-surface-variant text-on-surface-variant",
         variant === "error" && "bg-error text-on-error"
       )}
       onClick={onClick}

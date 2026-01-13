@@ -37,6 +37,14 @@ tasks:
       - CGO_ENABLED=0 GOOS=$(go env GOOS) GOARCH=$(go env GOARCH) go build -ldflags "-s -w" -o {{.DISTDIR}}/{{.BINARY}} ./...
       - upx {{.DISTDIR}}/{{.BINARY}}
 
+  install:
+    desc: Install the built binary to /usr/local/bin/
+    cmds:
+      - task: release
+      - systemctl --user stop selfserve
+      - cp ./dist/selfserve ~/.config/.bin/
+      - systemctl --user start selfserve
+
   clean:
     desc: Remove built artifacts
     cmds:
